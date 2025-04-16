@@ -17,12 +17,13 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
     }
   },
   "icons": {
+<<<<<<< HEAD:where-was-i-vite/public/manifest.json
 <<<<<<< HEAD:where-was-i-vite/public/manifest.json
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -32,5 +33,10 @@
     "48": "icon48.png",
     "128": "icon128.png"
 >>>>>>> 9cf5a6a (feat: save scroll position to sync storage after 3s of inactivity):manifest.json
+=======
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+>>>>>>> e1b343d (fix: update manifest file path for icons):manifest.json
   }
 }

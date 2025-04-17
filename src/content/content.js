@@ -1,4 +1,5 @@
 import { saveScrollPosition } from "../services/storage-service.js";
+import { restoreScrollPosition } from "../services/restore-service.js";
 
 let scrollTimeout;
 
@@ -7,4 +8,8 @@ window.addEventListener("scroll", () => {
   scrollTimeout = setTimeout(() => {
     saveScrollPosition();
   }, 3000);
+});
+
+window.addEventListener("load", () => {
+  restoreScrollPosition();
 });

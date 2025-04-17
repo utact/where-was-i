@@ -1,6 +1,4 @@
-function getStorageKey() {
-  return `scroll-data-${location.href}`;
-}
+import { getStorageKey } from "./key-util.js";
 
 export function saveScrollPosition() {
   const key = getStorageKey();

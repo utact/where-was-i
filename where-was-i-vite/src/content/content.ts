@@ -1,5 +1,5 @@
-import { saveScrollPosition } from "../services/storage-service";
-import { restoreScrollPosition } from "../services/restore-service";
+import { saveScrollPosition } from "../services/storage-service.ts";
+import { restoreScrollPosition } from "../services/restore-service.ts";
 
 let scrollTimeout: number | undefined;
 

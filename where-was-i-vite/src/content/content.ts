@@ -1,7 +1,7 @@
-import { saveScrollPosition } from "../services/storage-service.js";
-import { restoreScrollPosition } from "../services/restore-service.js";
+import { saveScrollPosition } from "../services/storage-service";
+import { restoreScrollPosition } from "../services/restore-service";
 
-let scrollTimeout;
+let scrollTimeout: number | undefined;
 
 window.addEventListener("scroll", () => {
   if (scrollTimeout) clearTimeout(scrollTimeout);

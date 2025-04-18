@@ -7,18 +7,28 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Node.js 의존성 폴더
+node_modules/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# 빌드 결과물 폴더
+dist/
+dist-ssr/
+
+# 환경 변수 파일
+.env
+
+# OS 생성 파일 (맥OS, 윈도우 등)
 .DS_Store
+Thumbs.db
+
+# 편집기 설정 파일
+.vscode/*
+.idea
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# 기타 생성되는 파일
+*.tgz

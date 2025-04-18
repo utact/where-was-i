@@ -18,11 +18,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
-
-    /* TypeScript의 타입 정의 설정 */
-    "typeRoots": ["./node_modules/@types", "./src/types"],
-    "types": ["chrome"]
+    "noUncheckedSideEffectImports": true
   },
   "include": ["src"]
 }

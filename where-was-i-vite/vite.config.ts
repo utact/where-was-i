@@ -5,8 +5,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        content: path.resolve(__dirname, "src/content.ts"),
-        background: path.resolve(__dirname, "src/background.ts"),
+        content: path.resolve(__dirname, "src/content/content.ts"),
+        background: path.resolve(__dirname, "src/background/background.ts"),
         // popup: path.resolve(__dirname, "src/popup.ts"),
       },
       output: {
@@ -16,7 +16,7 @@ export default defineConfig({
       },
     },
     minify: "esbuild",
-    target: "chrome89",
+    target: "chrome100",
   },
 
   resolve: {

@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import path from "path";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
   build: {
@@ -18,7 +19,16 @@ export default defineConfig({
     minify: "esbuild",
     target: "chrome100",
   },
-
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: "icons/*",
+          dest: "icons",
+        },
+      ],
+    }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

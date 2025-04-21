@@ -1,6 +1,6 @@
 export function createFloatingProgressBar(): void {
   const existing = document.getElementById("wwi-progress-bar-container");
-  if (existing) return; // 중복 생성 방지
+  if (existing) return;
 
   const progressContainer = document.createElement("div");
   progressContainer.id = "wwi-progress-bar-container";

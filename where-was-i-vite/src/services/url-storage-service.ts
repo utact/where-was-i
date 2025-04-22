@@ -18,7 +18,7 @@ export async function saveSiteInfoToStorage(
   if (existingIndex !== -1) {
     savedSites[existingIndex].lastAccessed = lastAccessed;
     savedSites[existingIndex].title = title;
-  } else {
+  } else if (existingIndex == -1) {
     savedSites.push({ title, url, lastAccessed });
   }
 

@@ -4,6 +4,10 @@ import {
 } from "../services/url-storage-service";
 import { SavedSite, ScrollData } from "../services/types";
 import { deleteSite } from "../services/delete-service";
+import {
+  calculateRetention,
+  getTextColor,
+} from "../services/retention-service";
 
 async function loadSavedSites() {
   const {
@@ -21,6 +25,9 @@ async function loadSavedSites() {
     const scrollInfo = scrollData[site.url] || { scroll: 0, height: 1 };
     const progress = Math.min(scrollInfo.scroll / scrollInfo.height, 1);
 
+    const retentionRate = calculateRetention(site.lastAccessed);
+    const textColor = getTextColor(retentionRate * 100);
+
     const entry = document.createElement("div");
     entry.className = "site-item";
 
@@ -33,6 +40,7 @@ async function loadSavedSites() {
     link.innerText = site.title;
     link.target = "_blank";
     link.title = site.title;
+    link.style.color = textColor;
 
     const deleteBtn = document.createElement("button");
     deleteBtn.innerText = "✕";

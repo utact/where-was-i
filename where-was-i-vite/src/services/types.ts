@@ -2,6 +2,7 @@ export interface SavedSite {
   title: string;
   url: string;
   lastAccessed: number;
+  status?: "active" | "pendingDelete";
 }
 
 export interface ScrollInfo {

@@ -58,6 +58,16 @@ async function loadSavedSites() {
   });
 }
 
+async function updateUI() {
+  await loadSavedSites();
+
+  const usageText = await getStorageUsageText();
+  const usageDiv = document.getElementById("storage-usage");
+  if (usageDiv) {
+    usageDiv.textContent = usageText;
+  }
+}
+
 async function saveCurrentSite() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab || !tab.id || !tab.url || !tab.url.startsWith("http")) return;
@@ -81,14 +91,25 @@ async function saveCurrentSite() {
 
   const { title, url, scroll, height } = result;
   await saveSiteInfoToStorage(title, url, scroll, height);
-  await loadSavedSites();
+  await updateUI();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function getStorageUsageText(): Promise<string> {
+  return new Promise((resolve) => {
+    const MAX_BYTES = 102400;
+    chrome.storage.sync.getBytesInUse(null, (usedBytes) => {
+      const usedKB = (usedBytes / 1024).toFixed(2);
+      const remainingKB = ((MAX_BYTES - usedBytes) / 1024).toFixed(2);
+      resolve(`사용 중: ${usedKB}KB / 남은 용량: ${remainingKB}KB`);
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
   const saveButton = document.getElementById("saveButton");
   if (saveButton) {
     saveButton.addEventListener("click", saveCurrentSite);
   }
 
-  loadSavedSites();
+  await updateUI();
 });

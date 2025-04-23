@@ -32,6 +32,7 @@ async function loadSavedSites() {
     link.className = "site-link";
     link.innerText = site.title;
     link.target = "_blank";
+    link.title = site.title;
 
     const deleteBtn = document.createElement("button");
     deleteBtn.innerText = "✕";

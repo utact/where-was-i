@@ -39,7 +39,7 @@ async function loadSavedSites() {
     deleteBtn.className = "delete-button";
     deleteBtn.onclick = async () => {
       await deleteSite(site.url);
-      await loadSavedSites();
+      await updateUI();
     };
 
     const progressBar = document.createElement("div");

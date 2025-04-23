@@ -1,10 +1,16 @@
 {
   "manifest_version": 3,
   "name": "Where Was I?",
-  "description": "A Chrome extension to remember your last scroll position and help you return where you left off.",
+  "description": "A Chrome extension to save your scroll position and bring you back right where you left off.",
   "version": "1.0.0",
   "permissions": ["storage", "scripting"],
   "host_permissions": ["<all_urls>"],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/icon48.png"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "background": {
     "service_worker": "background.js"
   },
@@ -15,7 +21,7 @@
     }
   ],
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",

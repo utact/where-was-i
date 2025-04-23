@@ -3,6 +3,7 @@ import {
   getSavedSitesAndScrollData,
 } from "../services/url-storage-service";
 import { SavedSite, ScrollData } from "../services/types";
+import { deleteSite } from "../services/delete-service";
 
 async function loadSavedSites() {
   const {
@@ -23,11 +24,22 @@ async function loadSavedSites() {
     const entry = document.createElement("div");
     entry.className = "site-entry";
 
+    const titleContainer = document.createElement("div");
+    titleContainer.className = "title-container";
+
     const link = document.createElement("a");
     link.href = site.url;
     link.className = "site-link";
     link.innerText = site.title;
     link.target = "_blank";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerText = "✕";
+    deleteBtn.className = "delete-button";
+    deleteBtn.onclick = async () => {
+      await deleteSite(site.url);
+      await loadSavedSites();
+    };
 
     const progressBar = document.createElement("div");
     progressBar.className = "progress-bar";
@@ -36,8 +48,10 @@ async function loadSavedSites() {
     filled.className = "progress-filled";
     filled.style.width = `${progress * 100}%`;
 
+    titleContainer.appendChild(link);
+    titleContainer.appendChild(deleteBtn);
+    entry.appendChild(titleContainer);
     progressBar.appendChild(filled);
-    entry.appendChild(link);
     entry.appendChild(progressBar);
     siteList.appendChild(entry);
   });

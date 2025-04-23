@@ -31,6 +31,8 @@ async function loadSavedSites() {
     const entry = document.createElement("div");
     entry.className = "site-item";
 
+    const isPendingDelete = site.status === "pendingDelete";
+
     const titleContainer = document.createElement("div");
     titleContainer.className = "title-container";
 
@@ -62,6 +64,11 @@ async function loadSavedSites() {
     entry.appendChild(titleContainer);
     progressBar.appendChild(filled);
     entry.appendChild(progressBar);
+
+    if (isPendingDelete) {
+      entry.style.filter = "grayscale(100%)";
+    }
+
     siteList.appendChild(entry);
   });
 }

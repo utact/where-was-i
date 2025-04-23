@@ -16,7 +16,7 @@ export async function saveSiteInfoToStorage(
     await chrome.storage.sync.get(["savedSites", "scrollData"]);
 
   const existingIndex = savedSites.findIndex((site) => site.url === url);
-  const status = progress >= 0.95 ? "pendingDelete" : "active";
+  const status = progress >= 0.9 ? "pendingDelete" : "active";
 
   if (existingIndex !== -1) {
     savedSites[existingIndex].lastAccessed = lastAccessed;

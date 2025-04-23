@@ -12,7 +12,7 @@ export async function saveSiteInfoToStorage(
     savedSites = [],
     scrollData = {},
   }: { savedSites?: SavedSite[]; scrollData?: ScrollData } =
-    await chrome.storage.local.get(["savedSites", "scrollData"]);
+    await chrome.storage.sync.get(["savedSites", "scrollData"]);
 
   const existingIndex = savedSites.findIndex((site) => site.url === url);
   if (existingIndex !== -1) {
@@ -24,12 +24,12 @@ export async function saveSiteInfoToStorage(
 
   scrollData[url] = { scroll, height };
 
-  await chrome.storage.local.set({ savedSites, scrollData });
+  await chrome.storage.sync.set({ savedSites, scrollData });
 }
 
 export async function getSavedSitesAndScrollData(): Promise<{
   savedSites: SavedSite[];
   scrollData: ScrollData;
 }> {
-  return await chrome.storage.local.get(["savedSites", "scrollData"]);
+  return await chrome.storage.sync.get(["savedSites", "scrollData"]);
 }

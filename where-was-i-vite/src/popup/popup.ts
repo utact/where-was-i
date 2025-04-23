@@ -22,7 +22,7 @@ async function loadSavedSites() {
     const progress = Math.min(scrollInfo.scroll / scrollInfo.height, 1);
 
     const entry = document.createElement("div");
-    entry.className = "site-entry";
+    entry.className = "site-item";
 
     const titleContainer = document.createElement("div");
     titleContainer.className = "title-container";

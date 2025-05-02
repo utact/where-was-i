@@ -4,9 +4,11 @@ export async function saveSiteInfoToStorage(
   title: string,
   url: string,
   scroll: number,
-  height: number
+  height: number,
+  viewport: number
 ): Promise<void> {
   const lastAccessed = Date.now();
+  const progress = Math.min(scroll / (height - viewport), 1);
 
   const {
     savedSites = [],
@@ -15,14 +17,17 @@ export async function saveSiteInfoToStorage(
     await chrome.storage.sync.get(["savedSites", "scrollData"]);
 
   const existingIndex = savedSites.findIndex((site) => site.url === url);
+  const status = progress >= 0.9 ? "pendingDelete" : "active";
+
   if (existingIndex !== -1) {
     savedSites[existingIndex].lastAccessed = lastAccessed;
     savedSites[existingIndex].title = title;
+    savedSites[existingIndex].status = status;
   } else if (existingIndex == -1) {
     savedSites.push({ title, url, lastAccessed });
   }
 
-  scrollData[url] = { scroll, height };
+  scrollData[url] = { scroll, height, viewport };
 
   await chrome.storage.sync.set({ savedSites, scrollData });
 }

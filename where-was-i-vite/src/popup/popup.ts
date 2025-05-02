@@ -4,6 +4,10 @@ import {
 } from "../services/url-storage-service";
 import { SavedSite, ScrollData } from "../services/types";
 import { deleteSite } from "../services/delete-service";
+import {
+  calculateRetention,
+  getTextColor,
+} from "../services/retention-service";
 
 async function loadSavedSites() {
   const {
@@ -18,11 +22,23 @@ async function loadSavedSites() {
   siteList.innerHTML = "";
 
   savedSites.forEach((site) => {
-    const scrollInfo = scrollData[site.url] || { scroll: 0, height: 1 };
-    const progress = Math.min(scrollInfo.scroll / scrollInfo.height, 1);
+    const scrollInfo = scrollData[site.url] || {
+      scroll: 0,
+      height: 1,
+      viewport: window.innerHeight,
+    };
+    const progress = Math.min(
+      scrollInfo.scroll / (scrollInfo.height - scrollInfo.viewport),
+      1
+    );
+
+    const retentionRate = calculateRetention(site.lastAccessed);
+    const textColor = getTextColor(retentionRate * 100);
 
     const entry = document.createElement("div");
-    entry.className = "site-entry";
+    entry.className = "site-item";
+
+    const isPendingDelete = site.status === "pendingDelete";
 
     const titleContainer = document.createElement("div");
     titleContainer.className = "title-container";
@@ -33,13 +49,14 @@ async function loadSavedSites() {
     link.innerText = site.title;
     link.target = "_blank";
     link.title = site.title;
+    link.style.color = textColor;
 
     const deleteBtn = document.createElement("button");
     deleteBtn.innerText = "✕";
     deleteBtn.className = "delete-button";
     deleteBtn.onclick = async () => {
       await deleteSite(site.url);
-      await loadSavedSites();
+      await updateUI();
     };
 
     const progressBar = document.createElement("div");
@@ -54,6 +71,11 @@ async function loadSavedSites() {
     entry.appendChild(titleContainer);
     progressBar.appendChild(filled);
     entry.appendChild(progressBar);
+
+    if (isPendingDelete) {
+      entry.style.filter = "grayscale(100%)";
+    }
+
     siteList.appendChild(entry);
   });
 }
@@ -74,7 +96,13 @@ async function saveCurrentSite() {
 
   const [{ result }] = await chrome.scripting.executeScript<
     [],
-    { title: string; url: string; scroll: number; height: number }
+    {
+      title: string;
+      url: string;
+      scroll: number;
+      height: number;
+      viewport: number;
+    }
   >({
     target: { tabId: tab.id },
     func: () => {
@@ -83,14 +111,15 @@ async function saveCurrentSite() {
         url: window.location.href,
         scroll: window.scrollY,
         height: document.documentElement.scrollHeight,
+        viewport: window.innerHeight,
       };
     },
   });
 
   if (!result) return; // undefined
 
-  const { title, url, scroll, height } = result;
-  await saveSiteInfoToStorage(title, url, scroll, height);
+  const { title, url, scroll, height, viewport } = result;
+  await saveSiteInfoToStorage(title, url, scroll, height, viewport);
   await updateUI();
 }
 

@@ -5,7 +5,9 @@ import {
   updateProgressBar,
 } from "../services/progress-bar-service.ts";
 
-let scrollTimeout: number | undefined;
+let lastScrollTime = 0;
+const throttleDelay = 100;
+let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
 window.addEventListener("load", () => {
   restoreScrollPosition();
@@ -14,11 +16,19 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("scroll", () => {
-  if (scrollTimeout) clearTimeout(scrollTimeout);
+  const currentTime = Date.now();
 
-  scrollTimeout = window.setTimeout(() => {
-    saveScrollPosition();
-  }, 3000);
+  if (currentTime - lastScrollTime > throttleDelay) {
+    lastScrollTime = currentTime;
+    updateProgressBar();
+  }
 
-  updateProgressBar();
+  if (debounceTimeout) clearTimeout(debounceTimeout);
+  debounceTimeout = setTimeout(() => {
+    updateProgressBar();
+  }, 500);
+});
+
+window.addEventListener("beforeunload", () => {
+  saveScrollPosition();
 });

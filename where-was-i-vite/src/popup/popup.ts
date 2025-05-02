@@ -1,8 +1,8 @@
 import {
   saveSiteInfoToStorage,
-  getSavedSitesAndScrollData,
+  getSavedSitesAndPageData,
 } from "../services/url-storage-service";
-import { SavedSite, ScrollData } from "../services/types";
+import { SavedSite, PageData } from "../services/types";
 import { deleteSite } from "../services/delete-service";
 import {
   calculateRetention,
@@ -12,9 +12,9 @@ import {
 async function loadSavedSites() {
   const {
     savedSites = [],
-    scrollData = {},
-  }: { savedSites: SavedSite[]; scrollData: ScrollData } =
-    await getSavedSitesAndScrollData();
+    pageData = {},
+  }: { savedSites: SavedSite[]; pageData: PageData } =
+    await getSavedSitesAndPageData();
 
   const siteList = document.getElementById("siteList");
   if (!siteList) return;
@@ -22,7 +22,7 @@ async function loadSavedSites() {
   siteList.innerHTML = "";
 
   savedSites.forEach((site) => {
-    const scrollInfo = scrollData[site.url] || {
+    const scrollInfo = pageData[site.url] || {
       scroll: 0,
       height: 1,
       viewport: window.innerHeight,

@@ -11,4 +11,4 @@ export interface ScrollInfo {
   viewport: number;
 }
 
-export type ScrollData = Record<string, ScrollInfo>;
+export type PageData = Record<string, ScrollInfo>;

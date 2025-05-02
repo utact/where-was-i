@@ -1,14 +1,14 @@
-import { getSavedSitesAndScrollData } from "../services/url-storage-service";
+import { getSavedSitesAndPageData } from "../services/url-storage-service";
 
 export async function deleteSite(urlToDelete: string): Promise<void> {
-  const { savedSites = [], scrollData = {} } =
-    await getSavedSitesAndScrollData();
+  const { savedSites = [], pageData: pageData = {} } =
+    await getSavedSitesAndPageData();
 
   const filteredSites = savedSites.filter((site) => site.url !== urlToDelete);
-  delete scrollData[urlToDelete];
+  delete pageData[urlToDelete];
 
   await chrome.storage.sync.set({
     savedSites: filteredSites,
-    scrollData,
+    pageData: pageData,
   });
 }

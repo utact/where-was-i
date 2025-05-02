@@ -4,9 +4,9 @@ interface ScrollPositionResult {
   [key: string]: number | undefined;
 }
 
-export function restoreScrollPosition(): void {
+export function restoreScrollPositionFromLocal(): void {
   const key: string = getStorageKey();
-  chrome.storage.sync.get([key], (result: ScrollPositionResult) => {
+  chrome.storage.local.get([key], (result: ScrollPositionResult) => {
     const savedY = result[key];
     if (savedY !== undefined) {
       window.scrollTo({ top: savedY, behavior: "smooth" });

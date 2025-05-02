@@ -1,5 +1,5 @@
-import { saveScrollPosition } from "../services/storage-service.ts";
-import { restoreScrollPosition } from "../services/restore-service.ts";
+import { saveScrollPositionToLocal } from "../services/storage-service.ts";
+import { restoreScrollPositionFromLocal } from "../services/restore-service.ts";
 import {
   createFloatingProgressBar,
   updateProgressBar,
@@ -10,7 +10,7 @@ const throttleDelay = 100;
 let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
 window.addEventListener("load", () => {
-  restoreScrollPosition();
+  restoreScrollPositionFromLocal();
   createFloatingProgressBar();
   updateProgressBar();
 });
@@ -30,5 +30,5 @@ window.addEventListener("scroll", () => {
 });
 
 window.addEventListener("beforeunload", () => {
-  saveScrollPosition();
+  saveScrollPositionToLocal();
 });

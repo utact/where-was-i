@@ -22,8 +22,15 @@ async function loadSavedSites() {
   siteList.innerHTML = "";
 
   savedSites.forEach((site) => {
-    const scrollInfo = scrollData[site.url] || { scroll: 0, height: 1 };
-    const progress = Math.min(scrollInfo.scroll / scrollInfo.height, 1);
+    const scrollInfo = scrollData[site.url] || {
+      scroll: 0,
+      height: 1,
+      viewport: window.innerHeight,
+    };
+    const progress = Math.min(
+      scrollInfo.scroll / (scrollInfo.height - scrollInfo.viewport),
+      1
+    );
 
     const retentionRate = calculateRetention(site.lastAccessed);
     const textColor = getTextColor(retentionRate * 100);
@@ -89,7 +96,13 @@ async function saveCurrentSite() {
 
   const [{ result }] = await chrome.scripting.executeScript<
     [],
-    { title: string; url: string; scroll: number; height: number }
+    {
+      title: string;
+      url: string;
+      scroll: number;
+      height: number;
+      viewport: number;
+    }
   >({
     target: { tabId: tab.id },
     func: () => {
@@ -98,14 +111,15 @@ async function saveCurrentSite() {
         url: window.location.href,
         scroll: window.scrollY,
         height: document.documentElement.scrollHeight,
+        viewport: window.innerHeight,
       };
     },
   });
 
   if (!result) return; // undefined
 
-  const { title, url, scroll, height } = result;
-  await saveSiteInfoToStorage(title, url, scroll, height);
+  const { title, url, scroll, height, viewport } = result;
+  await saveSiteInfoToStorage(title, url, scroll, height, viewport);
   await updateUI();
 }
 

@@ -4,10 +4,11 @@ export async function saveSiteInfoToStorage(
   title: string,
   url: string,
   scroll: number,
-  height: number
+  height: number,
+  viewport: number
 ): Promise<void> {
   const lastAccessed = Date.now();
-  const progress = Math.min(scroll / height, 1);
+  const progress = Math.min(scroll / (height - viewport), 1);
 
   const {
     savedSites = [],
@@ -26,7 +27,7 @@ export async function saveSiteInfoToStorage(
     savedSites.push({ title, url, lastAccessed });
   }
 
-  scrollData[url] = { scroll, height };
+  scrollData[url] = { scroll, height, viewport };
 
   await chrome.storage.sync.set({ savedSites, scrollData });
 }

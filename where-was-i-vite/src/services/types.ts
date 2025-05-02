@@ -8,6 +8,7 @@ export interface SavedSite {
 export interface ScrollInfo {
   scroll: number;
   height: number;
+  viewport: number;
 }
 
 export type ScrollData = Record<string, ScrollInfo>;

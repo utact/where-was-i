@@ -1,7 +1,7 @@
 import {
-  saveSiteInfoToStorage,
+  saveToSync,
   getSavedSitesAndPageData,
-} from "../services/url-storage-service";
+} from "../services/storage-service-sync";
 import { SavedSite, PageData } from "../services/types";
 import { deleteSite } from "../services/delete-service";
 import {
@@ -116,10 +116,10 @@ async function saveCurrentSite() {
     },
   });
 
-  if (!result) return; // undefined
+  if (!result) return;
 
   const { title, url, scroll, height, viewport } = result;
-  await saveSiteInfoToStorage(title, url, scroll, height, viewport);
+  await saveToSync(title, url, scroll, height, viewport);
   await updateUI();
 }
 

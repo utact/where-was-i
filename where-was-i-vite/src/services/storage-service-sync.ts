@@ -1,6 +1,6 @@
 import { SavedSite, PageData } from "./types";
 
-export async function saveSiteInfoToStorage(
+export async function saveToSync(
   title: string,
   url: string,
   scroll: number,

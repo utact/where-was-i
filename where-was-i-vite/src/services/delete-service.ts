@@ -1,4 +1,4 @@
-import { getSavedSitesAndPageData } from "../services/url-storage-service";
+import { getSavedSitesAndPageData } from "./storage-service-sync";
 
 export async function deleteSite(urlToDelete: string): Promise<void> {
   const { savedSites = [], pageData: pageData = {} } =

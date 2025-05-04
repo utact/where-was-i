@@ -2,7 +2,7 @@ import {
   saveToSync,
   getSavedSitesAndPageData,
 } from "../services/storage-service-sync";
-import { SavedSite, PageData } from "../services/types";
+import { SavedSites, PageData } from "../services/types";
 import { deleteSite } from "../services/delete-service";
 import {
   calculateRetention,
@@ -11,9 +11,9 @@ import {
 
 async function loadSavedSites() {
   const {
-    savedSites = [],
+    savedSites = {},
     pageData = {},
-  }: { savedSites: SavedSite[]; pageData: PageData } =
+  }: { savedSites: SavedSites; pageData: PageData } =
     await getSavedSitesAndPageData();
 
   const siteList = document.getElementById("siteList");
@@ -21,8 +21,8 @@ async function loadSavedSites() {
 
   siteList.innerHTML = "";
 
-  savedSites.forEach((site) => {
-    const scrollInfo = pageData[site.url] || {
+  for (const [url, site] of Object.entries(savedSites)) {
+    const scrollInfo = pageData[url] || {
       scroll: 0,
       height: 1,
       viewport: window.innerHeight,
@@ -34,17 +34,16 @@ async function loadSavedSites() {
 
     const retentionRate = calculateRetention(site.lastAccessed);
     const textColor = getTextColor(retentionRate * 100);
+    const isPendingDelete = site.status === "pendingDelete";
 
     const entry = document.createElement("div");
     entry.className = "site-item";
-
-    const isPendingDelete = site.status === "pendingDelete";
 
     const titleContainer = document.createElement("div");
     titleContainer.className = "title-container";
 
     const link = document.createElement("a");
-    link.href = site.url;
+    link.href = url;
     link.className = "site-link";
     link.innerText = site.title;
     link.target = "_blank";
@@ -55,7 +54,7 @@ async function loadSavedSites() {
     deleteBtn.innerText = "✕";
     deleteBtn.className = "delete-button";
     deleteBtn.onclick = async () => {
-      await deleteSite(site.url);
+      await deleteSite(url);
       await updateUI();
     };
 
@@ -77,7 +76,7 @@ async function loadSavedSites() {
     }
 
     siteList.appendChild(entry);
-  });
+  }
 }
 
 async function updateUI() {

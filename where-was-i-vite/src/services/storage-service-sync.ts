@@ -1,4 +1,4 @@
-import { SavedSite, PageData } from "./types";
+import { SavedSites, PageData } from "./types";
 
 export async function saveToSync(
   title: string,
@@ -9,31 +9,22 @@ export async function saveToSync(
 ): Promise<void> {
   const lastAccessed = Date.now();
   const progress = Math.min(scroll / (height - viewport), 1);
-
-  const {
-    savedSites = [],
-    pageData = {},
-  }: { savedSites?: SavedSite[]; pageData?: PageData } =
-    await chrome.storage.sync.get(["savedSites", "pageData"]);
-
-  const existingIndex = savedSites.findIndex((site) => site.url === url);
   const status = progress >= 0.9 ? "pendingDelete" : "active";
 
-  if (existingIndex !== -1) {
-    savedSites[existingIndex].lastAccessed = lastAccessed;
-    savedSites[existingIndex].title = title;
-    savedSites[existingIndex].status = status;
-  } else if (existingIndex == -1) {
-    savedSites.push({ title, url, lastAccessed });
-  }
+  const {
+    savedSites = {},
+    pageData = {},
+  }: { savedSites?: SavedSites; pageData?: PageData } =
+    await chrome.storage.sync.get(["savedSites", "pageData"]);
 
+  savedSites[url] = { title, lastAccessed, status };
   pageData[url] = { scroll, height, viewport };
 
-  await chrome.storage.sync.set({ savedSites, pageData: pageData });
+  await chrome.storage.sync.set({ savedSites, pageData });
 }
 
 export async function getSavedSitesAndPageData(): Promise<{
-  savedSites: SavedSite[];
+  savedSites: SavedSites;
   pageData: PageData;
 }> {
   return await chrome.storage.sync.get(["savedSites", "pageData"]);

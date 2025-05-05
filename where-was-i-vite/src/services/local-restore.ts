@@ -1,5 +1,5 @@
-import { getStorageKey } from "./key-util";
-import { showMiniToast } from "./mini-toast";
+import { getStorageKey } from "../utils/local-util";
+import { showMiniToast } from "../utils/mini-toast";
 
 interface ScrollPositionResult {
   [key: string]: number | undefined;
@@ -15,5 +15,3 @@ export function restoreFromLocal(): void {
     }
   });
 }
-
-// TODO: restoreFromSync()

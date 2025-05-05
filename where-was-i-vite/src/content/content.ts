@@ -1,22 +1,35 @@
-import { saveToLocal } from "../services/storage-service-local.ts";
-import { restoreFromLocal } from "../services/restore-service.ts";
+import { saveToLocal } from "../services/local-storage.ts";
+import { restoreFromLocal } from "../services/local-restore.ts";
+import { updateSync } from "../services/sync-storage.ts"; // import error
+import { restoreFromSync } from "../services/sync-restore.ts";
+
 import {
   createFloatingProgressBar,
   updateProgressBar,
-} from "../services/progress-bar-service.ts";
-import { showMiniToast } from "../services/mini-toast.ts";
+} from "../services/progress-bar.ts";
+
+import { getSavedSitesAndPageData } from "../utils/sync-util.ts"; // import error
 
 let lastScrollTime = 0;
 const throttleDelay = 100;
 let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
-// TODO: 분기 후 로직 분리
-window.addEventListener("load", () => {
-  restoreFromLocal();
+// restore
+window.addEventListener("load", async () => {
+  const { savedSites } = await getSavedSitesAndPageData();
+  const url = location.href;
+
+  if (savedSites && savedSites[url]?.status === "active") {
+    restoreFromSync();
+  } else {
+    restoreFromLocal();
+  }
+
   createFloatingProgressBar();
   updateProgressBar();
 });
 
+// progress bar
 window.addEventListener("scroll", () => {
   const currentTime = Date.now();
 
@@ -31,10 +44,16 @@ window.addEventListener("scroll", () => {
   }, 500);
 });
 
+// local manual save
 window.addEventListener("keydown", (event) => {
   if (event.altKey && event.key.toLowerCase() === "s") {
     saveToLocal();
     event.preventDefault();
-    showMiniToast("현재 위치를 기억합니다.");
   }
+});
+
+// sync auto save: not work!
+window.addEventListener("beforeunload", async () => {
+  const url = location.href;
+  updateSync(url);
 });

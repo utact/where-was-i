@@ -1,5 +1,5 @@
-import { getStorageKey } from "../utils/local-util";
-import { showMiniToast } from "../utils/mini-toast";
+import { getStorageKey } from "@/utils/local-util";
+import { showMiniToast } from "@/utils/mini-toast";
 
 interface ScrollPositionResult {
   [key: string]: number | undefined;

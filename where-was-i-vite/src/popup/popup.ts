@@ -1,10 +1,9 @@
-import { saveToSync } from "../services/sync-storage";
-import { deleteSite } from "../services/sync-delete";
+import { saveToSync } from "@/services/sync-storage";
+import { deleteSite } from "@/services/sync-delete";
 
-import { getSavedSitesAndPageData } from "../utils/sync-util";
-import { calculateRetention, getTextColor } from "../utils/retention";
-
-import { SavedSites, PageData } from "../types/sync-type";
+import { getSavedSitesAndPageData } from "@/utils/sync-util";
+import { calculateRetention, getTextColor } from "@/utils/retention";
+import { SavedSites, PageData } from "@/types/sync-type";
 
 async function loadSavedSites() {
   const {

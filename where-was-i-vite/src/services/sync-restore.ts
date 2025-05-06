@@ -1,4 +1,4 @@
-import { showMiniToast } from "../utils/mini-toast";
+import { showMiniToast } from "@/utils/mini-toast";
 
 export async function restoreFromSync(): Promise<void> {
   const url = location.href;

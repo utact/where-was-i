@@ -1,4 +1,4 @@
-import { SavedSites, PageData } from "../types/sync-type";
+import { SavedSites, PageData } from "@/types/sync-type";
 
 export async function saveToSync(
   title: string,

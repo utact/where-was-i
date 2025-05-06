@@ -1,4 +1,4 @@
-import { getSavedSitesAndPageData } from "../utils/sync-util";
+import { getSavedSitesAndPageData } from "@/utils/sync-util";
 
 export async function deleteSite(urlToDelete: string): Promise<void> {
   const { savedSites = {}, pageData = {} } = await getSavedSitesAndPageData();

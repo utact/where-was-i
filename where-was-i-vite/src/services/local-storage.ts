@@ -1,5 +1,5 @@
-import { getStorageKey } from "../utils/local-util";
-import { showMiniToast } from "../utils/mini-toast";
+import { getStorageKey } from "@/utils/local-util";
+import { showMiniToast } from "@/utils/mini-toast";
 
 export function saveToLocal(): void {
   const key: string = getStorageKey();

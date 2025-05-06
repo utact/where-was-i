@@ -1,4 +1,5 @@
 import { saveToLocal } from "@/services/local-storage";
+import { removeFromLocal } from "@/services/local-delete";
 import { restoreFromLocal } from "@/services/local-restore";
 import { restoreFromSync } from "@/services/sync-restore";
 import {
@@ -10,7 +11,6 @@ let lastScrollTime = 0;
 const throttleDelay = 80;
 let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
-// restore
 window.addEventListener("load", async () => {
   const { savedSites } = await getSavedSitesAndPageData();
   const url = location.href;
@@ -25,7 +25,6 @@ window.addEventListener("load", async () => {
   updateProgressBar();
 });
 
-// progress bar
 window.addEventListener("scroll", () => {
   const currentTime = Date.now();
 
@@ -40,15 +39,22 @@ window.addEventListener("scroll", () => {
   }, 250);
 });
 
-// local manual save
 window.addEventListener("keydown", (event) => {
-  if (event.altKey && event.key.toLowerCase() === "s") {
-    saveToLocal();
-    event.preventDefault();
+  if (event.altKey) {
+    const key = event.key.toLowerCase();
+
+    if (key === "s") {
+      saveToLocal();
+      event.preventDefault();
+    }
+
+    if (key === "d") {
+      removeFromLocal();
+      event.preventDefault();
+    }
   }
 });
 
-// sync auto save
 window.addEventListener("beforeunload", () => {
   chrome.runtime.sendMessage({
     type: "UPDATE_SYNC",

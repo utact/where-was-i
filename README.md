@@ -1,42 +1,79 @@
-# **Where Was I?** (WWI)
+# Where Was I?
 
-**Where Was I?** is a Chrome extension designed to assist users who frequently navigate between different web pages. In today's fast-paced world, we often find ourselves needing to revisit certain pages, whether frequently or occasionally.
+**"당신의 맥락을 저장합니다."**
+> Where Was I?는 사용자의 재방문 경험을 향상시키는 크롬 익스텐션입니다.  
+> 본 익스텐션은 사용자가 **어떤 글을, 어디까지 읽었고, 얼마나 기억하고 있는지**와 같은 '맥락'을 지원합니다.
 
-## Why is WWI Needed?
+##
 
-Chrome allows users to manage their most visited websites through bookmarks, but **Where Was I?** offers unique advantages that bookmarks cannot fulfill.
+👉 Where Was I?는 **사용자가 원하지 않는 정보**는 수집하지 않습니다.  
+👉 본 익스텐션에서는 **두 가지 방식**을 제안하며, 사용자는 기호에 따라 선택하여 이용합니다.
+1. **WWI Fixer** (기본형/비동기화)
+2. **WWI Tracker** (팝업형/동기화)
 
-### 1. **No Need for User Management**
-Bookmarks require users to manually add them, and this can easily be forgotten. Users also struggle with efficiently categorizing and managing bookmarks. **Where Was I?** automatically remembers the scroll position of every page you visit, without any additional effort on the user's part. It serves as a helper that remembers your reading progress on all websites, without needing the user to actively manage it.
+---
 
-### 2. **Context Preservation**
-Bookmarks merely save the webpage, but lose important context such as "where you last stopped reading," "why you visited the page," and "when you last visited." When revisiting a bookmarked page, you have to start over from the beginning. **Where Was I?** automatically saves your scroll position and brings you back to where you left off when you revisit a page. This allows you to continue reading seamlessly, making information consumption more continuous.
+## WWI Fixer
 
-🐈‍⬛ A cute cat will appear at the bottom right to notify you that the position has been restored.
+> WWI Fixer는 **단축키를 통해 현재 위치를 저장하고 재방문 시 자동 복원**해 줍니다.  
+> **local storage**를 사용하여 **정말 많은 웹 페이지**를 저장할 수 있습니다.  
+> 동기화되지 않는다는 단점이 있으며, **복원 외 추가적인 기능**은 없습니다.
 
-## Key Features (v1.0.0)
+### ⌨️ 키보드 단축키 기반 로컬 저장
+- `Alt + S`: 현재 페이지의 스크롤 위치를 로컬에 저장
+- `Alt + D`: 해당 저장 정보를 로컬에서 삭제
 
-### 1. **Automatic Scroll Position Saving and Restoration** ✅
-**Where Was I?** automatically saves the scroll position of the webpage and restores it to the exact same spot when revisiting the page.
+---
 
-### 2. **Cross-Device Synchronization** ✅
-By utilizing `chrome.storage.sync`, the extension syncs saved scroll positions across all devices where you are logged into the same Chrome account. This allows you to seamlessly continue reading on PC, laptop, tablet, or any other device.
+## WWI Tracker
 
-### 3. **Progress Visualization** ✅
-The extension provides a progress bar that visualizes the reading progress for each page. This allows you to easily track where you left off.
+> WWI Tracker는 **팝업을 열고 '현재 웹 페이지 저장' 버튼을 눌러 최초 등록**합니다.  
+> **sync storage**를 사용하여 **약 400개의 웹 페이지**를 저장할 수 있습니다.  
+> **모든 기기 간 동기화**되며, 조금 더 **특별한 기능**을 제공합니다.
 
-### 4. **Manual Save Feature** ✅
-Users can manually save and manage webpages through the popup window. Saved pages are visually represented with their title and progress.
+### 🧩 팝업 UI
+- 사용자가 직접 등록한 **웹 페이지 목록**과 **남은 저장소 용량**을 표시합니다.  
 
-### 5. **Memory Retention-Based Color Change** 🛠️
-Inspired by Ebbinghaus’s Forgetting Curve, the extension calculates the memory retention of a webpage and changes the color of its title text accordingly. As the forgetting rate increases, the title color turns red, making it easy for users to identify pages they need to revisit before forgetting them completely.
+### 📈 진행률 시각화
+- 각 웹 페이지의 시각화된 진행률을 통해 **진행 상황**을 한눈에 알아볼 수 있습니다.  
+- 모두 읽었다고 판단될 경우, 해당 웹 페이지를 `pendingDelete` **상태로 전환**합니다.  
+- 전환된 웹 페이지들은 **1일간 보관 후 자동으로 삭제**됩니다.
 
-### 6. **Reminder Feature** 🛠️
-For pages that haven't been visited in a long time, the extension provides reminders to help users remember and revisit those pages.
+### 🧠 기억 잔존율 시각화
+- 각 웹 페이지의 타이틀은 **마지막 액세스를 기점으로 점차 붉은 색상**에 가까워집니다.  
 
-### 7. **Summary Service** 🛠️
-For pages with a memory retention rate of 100%, the extension provides a summary service when revisiting the page. This allows users to quickly review any content they might have forgotten.
+### 🔖 스크롤 위치 자동 저장
+- **단축키를 누를 필요 없이** 웹 페이지를 닫아버리면, **자동으로 마지막 위치를 저장**합니다.
+- 해당 웹 페이지 재방문 시 **마지막 위치로 자동 복원**합니다.
 
-## License
+---
+
+## 📦 기술 스택
+- Chrome Extension Manifest V3
+- Storage API (`sync`, `local`)
+- TypeScript + Vite
+- Content Script & Background Worker
+
+## 🛠 개발 중인 기능들
+- 다 읽은 페이지 자동 삭제
+- 방치된 페이지 리마인더 알림
+- 망각률 높은 페이지 진행 내용 요약 (AI 활용)
+
+## 📂 설치 방법
+
+```bash
+git clone https://github.com/funczun/where-was-i.git
+cd where-was-i-vite
+npm install
+npm run build
+```
+생성된 dist/ 폴더를 크롬 확장 프로그램으로 로드합니다.
+
+## 🐛 이슈 제보
+사용 중 문제가 발생했거나 기능 제안을 하고 싶다면 [ISSUES](https://github.com/funczun/where-was-i/issues)를 방문해 주세요!
+
+---
+
+## ⚖️ License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.

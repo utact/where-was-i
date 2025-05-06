@@ -7,7 +7,7 @@ import {
 } from "@/services/progress-bar";
 
 let lastScrollTime = 0;
-const throttleDelay = 100;
+const throttleDelay = 80;
 let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
 // restore
@@ -37,7 +37,7 @@ window.addEventListener("scroll", () => {
   if (debounceTimeout) clearTimeout(debounceTimeout);
   debounceTimeout = setTimeout(() => {
     updateProgressBar();
-  }, 500);
+  }, 250);
 });
 
 // local manual save

@@ -5,5 +5,5 @@ export function saveToLocal(): void {
   const key: string = getStorageKey();
   const y: number = window.scrollY;
   chrome.storage.local.set({ [key]: y });
-  showMiniToast("현재 위치를 기억합니다.");
+  showMiniToast("[L] 현재 위치를 기억합니다.");
 }

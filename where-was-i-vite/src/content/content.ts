@@ -1,14 +1,10 @@
-import { saveToLocal } from "../services/local-storage.ts";
-import { restoreFromLocal } from "../services/local-restore.ts";
-import { updateSync } from "../services/sync-storage.ts"; // import error
-import { restoreFromSync } from "../services/sync-restore.ts";
-
+import { saveToLocal } from "@/services/local-storage";
+import { restoreFromLocal } from "@/services/local-restore";
+import { restoreFromSync } from "@/services/sync-restore";
 import {
   createFloatingProgressBar,
   updateProgressBar,
-} from "../services/progress-bar.ts";
-
-import { getSavedSitesAndPageData } from "../utils/sync-util.ts"; // import error
+} from "@/services/progress-bar";
 
 let lastScrollTime = 0;
 const throttleDelay = 100;
@@ -52,8 +48,28 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-// sync auto save: not work!
-window.addEventListener("beforeunload", async () => {
-  const url = location.href;
-  updateSync(url);
+// sync auto save
+window.addEventListener("beforeunload", () => {
+  chrome.runtime.sendMessage({
+    type: "UPDATE_SYNC",
+    payload: {
+      url: window.location.href,
+      scroll: window.scrollY,
+      height: document.documentElement.scrollHeight,
+      viewport: window.innerHeight,
+    },
+  });
 });
+
+/*
+Temporary solution due to import syntax error with `getSavedSitesAndPageData`
+Will refactor and resolve the import issues later
+ */
+import { SavedSites, PageData } from "../types/sync-type";
+
+export async function getSavedSitesAndPageData(): Promise<{
+  savedSites: SavedSites;
+  pageData: PageData;
+}> {
+  return await chrome.storage.sync.get(["savedSites", "pageData"]);
+}

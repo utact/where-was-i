@@ -1,5 +1,4 @@
 import { SavedSites, PageData } from "../types/sync-type";
-import { showMiniToast } from "@/utils/mini-toast";
 
 export async function saveToSync(
   title: string,
@@ -22,5 +21,4 @@ export async function saveToSync(
   pageData[url] = { scroll, height, viewport };
 
   await chrome.storage.sync.set({ savedSites, pageData });
-  showMiniToast("[S] 현재 위치를 기억합니다.");
 }

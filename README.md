@@ -23,6 +23,10 @@
 - `Alt + S`: 현재 페이지의 스크롤 위치를 로컬에 저장
 - `Alt + D`: 해당 저장 정보를 로컬에서 삭제
 
+
+https://github.com/user-attachments/assets/1069f779-b33b-48df-bb96-d2415c711ef4
+
+
 ---
 
 ## WWI Tracker
@@ -46,6 +50,10 @@
 - **단축키를 누를 필요 없이** 웹 페이지를 닫아버리면, **자동으로 마지막 위치를 저장**합니다.
 - 해당 웹 페이지 재방문 시 **마지막 위치로 자동 복원**합니다.
 
+
+https://github.com/user-attachments/assets/33c28227-ab8b-4233-9658-4d3249d106c4
+
+
 ---
 
 ## 📦 기술 스택
@@ -62,7 +70,7 @@
 ## 📂 설치 방법
 
 ```bash
-git clone https://github.com/funczun/where-was-i.git
+git clone https://github.com/utact/where-was-i.git
 cd where-was-i-vite
 npm install
 npm run build
@@ -70,7 +78,7 @@ npm run build
 생성된 dist/ 폴더를 크롬 확장 프로그램으로 로드합니다.
 
 ## 🐛 이슈 제보
-사용 중 문제가 발생했거나 기능 제안을 하고 싶다면 [ISSUES](https://github.com/funczun/where-was-i/issues)를 방문해 주세요!
+사용 중 문제가 발생했거나 기능 제안을 하고 싶다면 [ISSUES](https://github.com/utact/where-was-i/issues)를 방문해 주세요!
 
 ---
 

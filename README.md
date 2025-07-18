@@ -77,7 +77,18 @@ npm run build
 ```
 생성된 dist/ 폴더를 크롬 확장 프로그램으로 로드합니다.
 
-## 🐛 이슈 제보
+## 🐛 개발 일지 & 이슈 제보
+
+- [불편함이 개발로 이끌었다](https://funczun.tistory.com/97)
+- [개인 프로젝트지만 협업처럼 행동하자](https://funczun.tistory.com/98)
+- [Vite 기반 번들링 환경 구축과 타입 안정성을 위한 TS 마이그레이션](https://funczun.tistory.com/99)
+- [실수를 통해 성장하는 개발자가 되자](https://funczun.tistory.com/100)
+- [깃 히스토리는 중요할까? 중요하다면 왜 중요한 걸까?](https://funczun.tistory.com/101)
+- [크롬 확장 프로그램을 개발하자](https://funczun.tistory.com/102)
+- [배열 순회 문제와 팝업 진행률 이슈](https://funczun.tistory.com/103)
+- [세이브 취소/타이틀 축약/잔여 용량 체크/기억 잔존율 시각화](https://funczun.tistory.com/104)
+- [유휴 상태 콜백 메서드와 병렬 처리로 최적화 할 수 있을까?](https://funczun.tistory.com/105)
+
 사용 중 문제가 발생했거나 기능 제안을 하고 싶다면 [ISSUES](https://github.com/utact/where-was-i/issues)를 방문해 주세요!
 
 ---

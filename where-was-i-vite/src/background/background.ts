@@ -56,7 +56,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 });
 
 // 3. 기존 메시지 리스너는 그대로 유지합니다.
-chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((msg, _sender, _sendResponse) => {
   if (msg.type === "UPDATE_SYNC") {
     // 비동기 로직을 처리하기 위해 즉시 실행 함수(IIFE) 사용
     (async () => {

@@ -9,6 +9,15 @@
   <body>
     <div class="container">
       <header class="header">
+        <div class="settings-container">
+          <button id="settingsButton" class="icon-button" title="설정 열기">
+            ⚙️
+          </button>
+          <div id="settingsPanel" class="settings-panel hidden">
+            <label for="retentionPeriodInput">잔존율 계산 주기 (일):</label>
+            <input type="number" id="retentionPeriodInput" min="1" />
+          </div>
+        </div>
         <div class="search-container">
           <input type="search" id="searchInput" placeholder="검색..." />
         </div>
@@ -25,9 +34,7 @@
       <main id="siteList" class="site-list-container"></main>
 
       <footer class="footer">
-        <button id="saveButton" class="save-button">
-          <span class="plus-icon">+</span> 현재 웹 페이지 저장
-        </button>
+        <button id="saveButton" class="save-button">현재 웹 페이지 저장</button>
         <div id="storage-usage" class="storage-usage"></div>
       </footer>
     </div>

@@ -7,6 +7,6 @@ export async function restoreFromSync(): Promise<void> {
 
   if (scrollData && typeof scrollData.scroll === "number") {
     window.scrollTo({ top: scrollData.scroll, behavior: "smooth" });
-    showMiniToast("[S] 이전에 읽던 위치로 이동했어요!");
+    showMiniToast("마지막 위치로 복원되었습니다.");
   }
 }

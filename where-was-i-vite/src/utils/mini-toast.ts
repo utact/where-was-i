@@ -1,4 +1,12 @@
 export function showMiniToast(message: string) {
+  const NOTIFICATION_SHOWN_KEY = "wwi-notification-shown";
+
+  // Only show the toast once per session to avoid duplication on restores.
+  if (sessionStorage.getItem(NOTIFICATION_SHOWN_KEY)) {
+    return;
+  }
+  sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, "true");
+
   const toast = document.createElement("div");
 
   const img = document.createElement("img");

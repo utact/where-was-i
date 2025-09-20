@@ -3,6 +3,7 @@ import { deleteSite } from "@/services/sync-delete";
 
 import { getSavedSitesAndPageData } from "@/utils/sync-util";
 import { calculateRetention, getTextColor } from "@/utils/retention";
+import { calculateRemainingTime } from "@/utils/time-util";
 import { SavedSites, PageData } from "@/types/sync-type";
 
 // --- New Helper Functions ---
@@ -55,7 +56,12 @@ type EnrichedSiteData = {
   isPendingDelete: boolean;
   timeAgo: string;
   detailedTime: string;
+  remainingTime: string;
 };
+
+// --- SVG Icons ---
+const SVG_ICON_EDIT = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+const SVG_ICON_DELETE = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
 
 // --- Core Rendering Logic ---
 
@@ -129,20 +135,35 @@ async function renderUI() {
 
       const progressPercent = Math.round(site.progress * 100);
 
+      // Determine progress bar class based on progress
+      let progressClass = "";
+      if (progressPercent <= 30) {
+        progressClass = "progress-low";
+      } else if (progressPercent < 100) {
+        progressClass = "progress-mid";
+      } else {
+        progressClass = "progress-high";
+      }
+
       entry.innerHTML = `
-        <div class="site-item-content">
-          <a href="${site.url}" class="site-link" target="_blank" style="color: ${site.textColor};" data-tooltip="${site.detailedTime}">
-            ${site.title}
-          </a>
-          <span class="site-meta">${site.domain} - ${site.timeAgo}</span>
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div class="progress-filled" style="width: ${progressPercent}%;"></div>
+        <a href="${site.url}" target="_blank" class="item-main-link" title="'${site.title}' 페이지 열기">
+          <div class="site-item-content">
+            <div class="title-wrapper">
+              <span class="site-title" style="color: ${site.textColor};" data-tooltip="${site.detailedTime}">${site.title}</span>
             </div>
-            <span class="progress-text">${progressPercent}%</span>
+            <span class="site-meta">${site.timeAgo} <span class="remaining-time">(${site.remainingTime})</span></span>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-filled ${progressClass}" style="width: ${progressPercent}%;"></div>
+              </div>
+              <span class="progress-text">${progressPercent}%</span>
+            </div>
           </div>
+        </a>
+        <div class="item-actions">
+           <button class="edit-button icon-button" title="제목 수정" data-url="${site.url}">${SVG_ICON_EDIT}</button>
+           <button class="delete-button icon-button" title="삭제" data-url="${site.url}">${SVG_ICON_DELETE}</button>
         </div>
-        <button class="delete-button" data-url="${site.url}">✕</button>
       `;
 
       groupElement.appendChild(entry);
@@ -158,6 +179,51 @@ async function renderUI() {
         await deleteSite(urlToDelete);
         await initialize(); // Re-fetch and re-render everything
       }
+    });
+  });
+
+  // Add event listeners for title editing
+  document.querySelectorAll(".edit-button").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const targetButton = e.currentTarget as HTMLButtonElement;
+      const url = targetButton.dataset.url;
+      if (!url) return;
+
+      const siteItem = targetButton.closest(".site-item");
+      if (!siteItem) return;
+
+      const titleSpan = siteItem.querySelector<HTMLSpanElement>(".site-title");
+      const wrapper = titleSpan?.parentElement;
+      if (!titleSpan || !wrapper) return;
+
+      const currentTitle = titleSpan.innerText;
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "title-input";
+      input.value = currentTitle;
+
+      const saveOrCancel = async (event: FocusEvent | KeyboardEvent) => {
+        const newTitle = input.value.trim();
+        if (event.type === "blur" || (event as KeyboardEvent).key === "Enter") {
+          if (newTitle && newTitle !== currentTitle) {
+            await updateSiteTitle(url, newTitle);
+          }
+        }
+        await initialize(); // Always re-render to restore UI or show update
+      };
+
+      input.addEventListener("blur", saveOrCancel);
+      input.addEventListener("keydown", (keyEvent) => {
+        if (keyEvent.key === "Enter" || keyEvent.key === "Escape") {
+          input.blur();
+        }
+      });
+
+      wrapper.innerHTML = "";
+      wrapper.appendChild(input);
+      input.focus();
+      input.select();
     });
   });
 }
@@ -191,6 +257,12 @@ async function initialize() {
       const retentionRate = await calculateRetention(site.lastAccessed);
       const domain = new URL(url).hostname;
 
+      const remainingTime = calculateRemainingTime(
+        scrollInfo.height,
+        scrollInfo.scroll,
+        scrollInfo.viewport
+      );
+
       return {
         url,
         title: site.title,
@@ -202,6 +274,7 @@ async function initialize() {
         isPendingDelete: site.status === "pendingDelete",
         timeAgo: formatTimeAgo(site.lastAccessed),
         detailedTime: formatDetailedTime(site.lastAccessed),
+        remainingTime,
       };
     }
   );
@@ -215,6 +288,14 @@ async function initialize() {
   const usageDiv = document.getElementById("storage-usage");
   if (usageDiv) {
     usageDiv.textContent = usageText;
+  }
+}
+
+async function updateSiteTitle(url: string, newTitle: string) {
+  const { savedSites } = await getSavedSitesAndPageData();
+  if (savedSites && savedSites[url]) {
+    savedSites[url].title = newTitle;
+    await chrome.storage.sync.set({ savedSites });
   }
 }
 
@@ -270,6 +351,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const saveButton = document.getElementById("saveButton");
   const searchInput = document.getElementById("searchInput");
   const sortSelect = document.getElementById("sortSelect");
+  const settingsButton = document.getElementById("settingsButton");
+  const settingsPanel = document.getElementById("settingsPanel");
+  const retentionPeriodInput = document.getElementById(
+    "retentionPeriodInput"
+  ) as HTMLInputElement;
 
   if (saveButton) {
     saveButton.addEventListener("click", saveCurrentSite);
@@ -279,6 +365,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   if (sortSelect) {
     sortSelect.addEventListener("change", renderUI);
+  }
+
+  // Settings Panel Logic
+  if (settingsButton && settingsPanel) {
+    settingsButton.addEventListener("click", () => {
+      settingsPanel.classList.toggle("hidden");
+    });
+    // Close settings panel when clicking outside
+    document.addEventListener("click", (e) => {
+      if (
+        !settingsPanel.classList.contains("hidden") &&
+        !settingsPanel.contains(e.target as Node) &&
+        !settingsButton.contains(e.target as Node)
+      ) {
+        settingsPanel.classList.add("hidden");
+      }
+    });
+  }
+
+  if (retentionPeriodInput) {
+    // Load initial value
+    const { userOptions = {} } = await chrome.storage.sync.get("userOptions");
+    retentionPeriodInput.value =
+      userOptions.retentionPeriodInDays?.toString() || "14";
+
+    // Save on change and re-render
+    retentionPeriodInput.addEventListener("change", async () => {
+      const newPeriod = parseInt(retentionPeriodInput.value, 10);
+      if (!isNaN(newPeriod) && newPeriod > 0) {
+        const { userOptions = {} } = await chrome.storage.sync.get(
+          "userOptions"
+        );
+        userOptions.retentionPeriodInDays = newPeriod;
+        await chrome.storage.sync.set({ userOptions });
+        await initialize(); // Re-calculate and re-render all
+      }
+    });
   }
 
   await initialize();

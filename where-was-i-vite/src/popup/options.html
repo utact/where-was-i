@@ -9,14 +9,13 @@
     <div class="container">
       <h1>Where Was I? 옵션</h1>
       <div class="option-item">
-        <label for="decayRate">기억 잔존율 감쇠율 (Decay Rate)</label>
+        <label for="retentionPeriod">기억 잔존율 계산 주기 (일)</label>
         <div class="input-group">
-          <input type="range" id="decayRate" min="0.01" max="0.2" step="0.01" />
-          <span id="decayRateValue"></span>
+          <input type="number" id="retentionPeriod" min="1" step="1" />
         </div>
         <p class="description">
-          값이 높을수록 마지막으로 읽은 후 시간이 지남에 따라 기억 잔존율이 더
-          빨리 감소합니다 (색상이 더 빨리 붉어집니다).
+          설정한 기간이 지나면 기억 잔존율이 약 37%가 됩니다. 숫자가 작을수록
+          색상이 더 빨리 붉어집니다.
         </p>
       </div>
       <button id="saveButton">저장</button>

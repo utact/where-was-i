@@ -11,7 +11,7 @@ export function restoreFromLocal(): void {
     const savedY = result[key];
     if (savedY !== undefined) {
       window.scrollTo({ top: savedY, behavior: "smooth" });
-      showMiniToast("[L] 이전에 읽던 위치로 이동했어요!");
+      showMiniToast("마지막 위치로 복원되었습니다.");
     }
   });
 }

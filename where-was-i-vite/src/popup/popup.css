@@ -1,120 +1,264 @@
-html,
-body {
-  margin: 0;
-  padding: 0;
+/* General Styles */
+:root {
+  --bg-color: #f8f9fa;
+  --container-bg: #ffffff;
+  --text-color: #212529;
+  --text-color-light: #6c757d;
+  --border-color: #dee2e6;
+  --primary-color: #0d6efd;
+  --hover-bg: #f1f3f5;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  width: 300px;
-  padding-left: 10px;
-  padding-right: 10px;
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  width: 380px;
+  font-size: 14px;
+}
+
+.container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 500px; /* Fixed height for the popup */
+  background-color: var(--container-bg);
 }
 
-h3 {
-  margin-top: 14px;
-  margin-bottom: 10px;
+/* Header: Search & Sort */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--container-bg);
 }
 
-#header {
-  position: sticky;
-  top: 0;
-  background-color: #ffffff;
-  z-index: 2;
-  border-bottom: 1px solid #e0e0e0;
+.search-container {
+  flex-grow: 1;
 }
 
-#siteList {
+#searchInput,
+#sortSelect {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #f1f3f5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#searchInput:focus,
+#sortSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+}
+
+/* Main Content: Site List */
+.site-list-container {
   flex-grow: 1;
   overflow-y: auto;
-  margin-top: 10px;
+  padding: 8px 0;
 }
 
-#saveButtonContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  position: sticky;
-  bottom: 0;
-  background-color: #ffffff;
-  z-index: 10;
-  padding-bottom: 10px;
-  border-top: 1px solid #e0e0e0;
+/* Accordion Grouping */
+.domain-group {
+  border-bottom: 1px solid var(--border-color);
 }
 
-.site-item {
-  margin-bottom: 12px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+.domain-group:last-child {
+  border-bottom: none;
 }
 
-.title-container {
+.domain-summary {
+  padding: 12px;
+  font-weight: 600;
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  list-style: none; /* Remove default marker */
+}
+
+.domain-summary::-webkit-details-marker {
+  display: none; /* Hide marker for Chrome */
+}
+
+.domain-summary::after {
+  content: "▶";
+  font-size: 0.8em;
+  transition: transform 0.2s;
+  transform: rotate(0deg);
+}
+
+.domain-group[open] > .domain-summary::after {
+  transform: rotate(90deg);
+}
+
+/* Site Item */
+.site-item {
+  padding: 10px 12px 10px 20px;
+  position: relative;
+  transition: background-color 0.2s;
+}
+
+.site-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.site-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .site-link {
-  display: block;
-  font-weight: bold;
-  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none;
+  display: block;
+}
+
+.site-meta {
+  font-size: 12px;
+  color: var(--text-color-light);
+}
+
+/* Progress Bar */
+.progress-container {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .progress-bar {
-  width: 100%;
+  flex-grow: 1;
   height: 8px;
-  background-color: #e0e0e0;
+  background-color: #e9ecef;
   border-radius: 4px;
   overflow: hidden;
-  margin-top: 4px;
 }
 
 .progress-filled {
   height: 100%;
-  background-color: #81c784;
+  background-color: var(--primary-color);
+  border-radius: 4px;
+  transition: width 0.3s ease-in-out;
 }
 
-#saveButton {
-  margin-top: 10px;
-  padding: 8px 12px;
-  width: 100%;
-  background-color: #4a90e2;
+.progress-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-color-light);
+  min-width: 30px;
+  text-align: right;
+}
+
+/* Action Buttons */
+.delete-button {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: #e63946;
   color: white;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#saveButton:hover {
-  background-color: #007bff;
-}
-
-.delete-button {
-  float: right;
-  background: none;
-  border: none;
-  color: #888;
-  font-weight: bold;
-  cursor: pointer;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
   font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.site-item:hover .delete-button {
+  opacity: 1;
 }
 
 .delete-button:hover {
-  color: #e53935;
+  transform: translateY(-50%) scale(1.1);
+  background: #d62828;
 }
 
-#storage-usage {
-  font-size: 8px;
-  color: gray;
-  margin-top: 8px;
-  text-align: right;
+/* Tooltip */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background-color: #343a40;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 10;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Footer */
+.footer {
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.save-button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.save-button:hover {
+  background-color: #0b5ed7;
+}
+
+.storage-usage {
+  font-size: 11px;
+  color: var(--text-color-light);
+  text-align: center;
+}
+
+/* Pending Delete Style */
+.is-pending-delete {
+  opacity: 0.6;
+  filter: grayscale(80%);
 }

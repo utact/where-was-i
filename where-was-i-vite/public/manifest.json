@@ -11,6 +11,7 @@
       "matches": ["<all_urls>"]
     }
   ],
+  "options_page": "src/options/options.html",
   "background": {
     "service_worker": "background.js"
   },

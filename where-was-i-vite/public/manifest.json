@@ -3,7 +3,7 @@
   "name": "Where Was I?",
   "description": "A Chrome extension to save your scroll position and bring you back right where you left off.",
   "version": "1.0.0",
-  "permissions": ["storage", "scripting"],
+  "permissions": ["storage", "scripting", "alarms"],
   "host_permissions": ["<all_urls>"],
   "web_accessible_resources": [
     {

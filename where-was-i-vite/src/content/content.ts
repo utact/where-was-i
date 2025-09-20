@@ -55,16 +55,27 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-window.addEventListener("beforeunload", () => {
-  chrome.runtime.sendMessage({
-    type: "UPDATE_SYNC",
-    payload: {
-      url: window.location.href,
-      scroll: window.scrollY,
-      height: document.documentElement.scrollHeight,
-      viewport: window.innerHeight,
-    },
-  });
+const updateSyncStorage = async () => {
+  const { savedSites } = await getSavedSitesAndPageData();
+  const url = window.location.href;
+
+  if (savedSites && savedSites[url]?.status === "active") {
+    chrome.runtime.sendMessage({
+      type: "UPDATE_SYNC",
+      payload: {
+        url: url,
+        scroll: window.scrollY,
+        height: document.documentElement.scrollHeight,
+        viewport: window.innerHeight,
+      },
+    });
+  }
+};
+
+window.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    updateSyncStorage();
+  }
 });
 
 /*

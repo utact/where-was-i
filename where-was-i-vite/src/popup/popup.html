@@ -3,19 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Where Was I? - 저장된 웹 페이지</title>
+    <title>Where Was I?</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div id="header">
-      <h3>🕮 저장된 웹 페이지 목록</h3>
-    </div>
-    <div id="siteList"></div>
-    <div id="saveButtonContainer">
-      <button id="saveButton">현재 웹 페이지 저장</button>
-      <div id="storage-usage"></div>
-    </div>
+    <div class="container">
+      <header class="header">
+        <div class="settings-container">
+          <button id="settingsButton" class="icon-button" title="설정 열기">
+            ⚙️
+          </button>
+          <div id="settingsPanel" class="settings-panel hidden">
+            <label for="retentionPeriodInput">잔존율 계산 주기 (일):</label>
+            <input type="number" id="retentionPeriodInput" min="1" />
+          </div>
+        </div>
+        <div class="search-container">
+          <input type="search" id="searchInput" placeholder="검색..." />
+        </div>
+        <div class="sort-container">
+          <select id="sortSelect">
+            <option value="recent">최근 방문 순</option>
+            <option value="progress-desc">진행률 높은 순</option>
+            <option value="progress-asc">진행률 낮은 순</option>
+            <option value="retention">오래된 순</option>
+          </select>
+        </div>
+      </header>
 
+      <main id="siteList" class="site-list-container"></main>
+
+      <footer class="footer">
+        <button id="saveButton" class="save-button">현재 웹 페이지 저장</button>
+        <div id="storage-usage" class="storage-usage"></div>
+      </footer>
+    </div>
     <script type="module" src="popup.ts"></script>
   </body>
 </html>

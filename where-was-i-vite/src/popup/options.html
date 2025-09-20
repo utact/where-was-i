@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Where Was I? - 옵션</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Where Was I? 옵션</h1>
+      <div class="option-item">
+        <label for="retentionPeriod">기억 잔존율 계산 주기 (일)</label>
+        <div class="input-group">
+          <input type="number" id="retentionPeriod" min="1" step="1" />
+        </div>
+        <p class="description">
+          설정한 기간이 지나면 기억 잔존율이 약 37%가 됩니다. 숫자가 작을수록
+          색상이 더 빨리 붉어집니다.
+        </p>
+      </div>
+      <button id="saveButton">저장</button>
+      <div id="statusMessage"></div>
+    </div>
+    <script type="module" src="options.ts"></script>
+  </body>
+</html>
